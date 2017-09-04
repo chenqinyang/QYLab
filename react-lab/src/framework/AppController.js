@@ -5,7 +5,7 @@ import {
   BrowserRouter as Router
 } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import {  Link } from 'react-router-dom';
 // import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux';
 
 
@@ -28,12 +28,15 @@ class AppController extends Component {
 
 				{console.log("AppController.props in render = ", this.props)}
 
+				
+
 				<div className="page-header">
 					<h1>AppController --- <small>funcId: [ {this.props.state.funcId} ]</small></h1>
 				</div>
 				
 				<Router history={history}>
 		            <div>
+		            	<Link to="/EntryPage">Jump to Entry</Link>
 		            	
 						<Route path="/EntryPage" component={EntryPage} />
 						<Route path="/FirstPage" component={FirstPage} />
