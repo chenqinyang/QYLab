@@ -9,6 +9,13 @@ import reducers from './reducer';
 import Header from './Header';
 import AppController from './framework/AppController';
 
+import {addLocaleData, IntlProvider} from 'react-intl';
+import en from 'react-intl/locale-data/en';
+
+//saga
+import createSagaMiddleware from 'redux-saga';
+import sagaA from './saga//sagaA'
+
 
 // Create a history of your choosing (we're using a browser history in this case)
 // const history = createHistory();
@@ -27,10 +34,24 @@ import AppController from './framework/AppController';
 // );
 
 
+// This example app only uses English. A fake `"en-UPPER"` locale is created so
+// translations can be emulated.
+addLocaleData(en);
+addLocaleData({
+    locale: 'en-UPPER',
+    parentLocale: 'en',
+});
+
+// create the saga middleware
+const sagaMiddleware = createSagaMiddleware()
+
 const store = createStore(
-  reducers //,
-  // applyMiddleware(middleware)
+  reducers,
+  applyMiddleware(sagaMiddleware)
 );
+
+// then run the saga
+sagaMiddleware.run(sagaA);
 
 // store.dispatch(push('/EntryPage'));
 
@@ -51,11 +72,15 @@ class App extends Component {
 
         <br/><br/><br/>
 
-        <Provider store={store}>
+        <IntlProvider locale="en">
 
-          <AppController history={history}/>
+          <Provider store={store}>
 
-        </Provider>
+            <AppController history={history}/>
+
+          </Provider>
+
+        </IntlProvider>
 
       </div>
         
