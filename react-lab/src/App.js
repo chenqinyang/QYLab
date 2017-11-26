@@ -39,11 +39,18 @@ import sagaA from './saga//sagaA'
 addLocaleData(en);
 addLocaleData({
     locale: 'en-UPPER',
-    parentLocale: 'en',
+    parentLocale: 'en'
 });
 
 // create the saga middleware
-const sagaMiddleware = createSagaMiddleware()
+const sagaMiddleware = createSagaMiddleware(
+  {
+    emitter: emit => action => {
+     console.log("saga monitor : ", emit);
+     console.log("saga monitor action : ", action);
+    }
+  }
+)
 
 const store = createStore(
   reducers,
