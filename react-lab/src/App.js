@@ -42,12 +42,53 @@ addLocaleData({
     parentLocale: 'en'
 });
 
+let pendingIDlist = []
+
+function isValidTask(effect) {
+  if (effect.TAKE == undefined) {
+    return true
+  } else {
+    return false
+  }
+}
+
+function addToQueue(option) {
+  const {effectId, effect } = option
+  if (isValidTask(effect)) {
+    pendingIDlist.push(effectId);
+    // pendingIDlist ++
+    console.log(">>> pendingIDlist++ , ", pendingIDlist)
+    if (pendingIDlist.length == 1) {
+      console.log(">>> the loading can be started.")
+    }
+  }
+}
+
+function removeFromQueue(id) {
+  // pendingIDlist --
+  pendingIDlist.splice(pendingIDlist.indexOf(id), 1)
+  console.log(">>> pendingIDlist-- , ", pendingIDlist)
+  // console.log(">>> pendingIDlist = ", pendingIDlist);
+
+  if (pendingIDlist.length == 0) {
+    console.log(">>> the loading can be removed.")
+  } 
+}
+
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware(
   {
-    emitter: emit => action => {
-     console.log("saga monitor : ", emit);
-     console.log("saga monitor action : ", action);
+    // emitter: emit => action => {
+    //  console.log("saga monitor : ", emit);
+    //  console.log("saga monitor action : ", action);
+    // },
+
+    sagaMonitor : {
+      effectTriggered : (option) => { console.log(">>> effect trigger, ", option.effectId, option.effect); addToQueue(option) },
+      effectResolved : (id, result) => { console.log(">>> effect resolved, ", id); removeFromQueue(id) },
+      effectRejected : (id, error) => { console.log(">>> effect reject, ", id);  removeFromQueue(id) },
+      effectCancelled : (id) => { console.log(">>> effect cancel, ", id);  removeFromQueue(id) } //,
+      // actionDispatched : (...params) => { console.log(">>> actionDispatched : ", ...params) },
     }
   }
 )
@@ -58,7 +99,11 @@ const store = createStore(
 );
 
 // then run the saga
-sagaMiddleware.run(sagaA);
+try {
+  sagaMiddleware.run(sagaA);
+} catch (e) {
+  alert ("init saga error!");
+}
 
 // store.dispatch(push('/EntryPage'));
 

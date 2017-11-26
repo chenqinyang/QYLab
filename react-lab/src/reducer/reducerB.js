@@ -4,8 +4,8 @@ const initialStateTwo = {
 
 const reducerTwo = (state = initialStateTwo, action) => {
 
-  	console.log("reducerTwo state = " , state);
-	console.log("reducerTwo action = " , action)
+  	// console.log("reducerTwo state = " , state);
+	// console.log("reducerTwo action = " , action)
 
   	switch (action.type) {
 	  	case "updateFuncData" :
