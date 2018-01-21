@@ -84,7 +84,7 @@ const sagaMiddleware = createSagaMiddleware(
     // },
 
     sagaMonitor : {
-      effectTriggered : (option) => { console.log(">>> effect trigger, ", option.effectId, option.effect); addToQueue(option) },
+      effectTriggered : (option) => { console.log(">>> effect trigger, ", option); addToQueue(option) },
       effectResolved : (id, result) => { console.log(">>> effect resolved, ", id); removeFromQueue(id) },
       effectRejected : (id, error) => { console.log(">>> effect reject, ", id);  removeFromQueue(id) },
       effectCancelled : (id) => { console.log(">>> effect cancel, ", id);  removeFromQueue(id) } //,
